@@ -1,10 +1,11 @@
 name: Layout Eyes + MCP inspect/resolve
 
 on:
-  # Merge into main only. Pushing the PR branch or opening/updating a PR
-  # must not start another run (that was the 2x-per-commit double fire).
-  push:
+  # One run per PR update. Do not also listen for push — that was the
+  # 2x-per-commit double fire (push to the branch + pull_request).
+  pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
@@ -18,7 +19,7 @@ jobs:
       APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
       APPLITOOLS_READ_KEY: ${{ secrets.APPLITOOLS_READ_KEY }}
       APPLITOOLS_WRITE_KEY: ${{ secrets.APPLITOOLS_WRITE_KEY }}
-      APPLITOOLS_BATCH_ID: ${{ github.sha }}
+      APPLITOOLS_BATCH_ID: ${{ github.event.pull_request.head.sha || github.sha }}
       APPLITOOLS_BATCH_NAME: Layout GHA — ${{ github.ref_name }} #${{ github.run_number }}
       APPLITOOLS_BATCH_BUILD_ID: ${{ github.run_id }}
       # Same beta flag as ~/.cursor/mcp.json — unlocks eyes_inspect_* and eyes_resolve_*.
