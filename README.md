@@ -43,10 +43,10 @@ That is everything — the sample app ships with this project.
 ## GitHub Actions — inspect + resolve
 
 [`.github/workflows/layout-eyes-mcp.yml`](.github/workflows/layout-eyes-mcp.yml)
-runs only when a PR is **merged into `main`** (or via **Run workflow**). It
-does not run on PR opens or branch pushes. After merge it starts a **local
-Cursor agent** (`npm run ci:agent`) with the Applitools MCP server attached.
-Watch **Cursor agent — Eyes inspect + resolve** for inspect and resolve.
+runs once when you **open or update a PR into `main`** (or via **Run workflow**).
+It does not also run on branch `push`, so each commit is not tested twice.
+The job starts a **local Cursor agent** (`npm run ci:agent`) with the
+Applitools MCP server attached. Watch **Cursor agent — Eyes inspect + resolve**.
 
 Add the same four names as **Actions secrets** (values from `.env`):
 

@@ -23,7 +23,7 @@ function FeaturedCarousel() {
 
   return (
     <div
-      className={`relative flex h-48 w-full items-center justify-center rounded-xl bg-gradient-to-r px-6 text-center text-lg font-semibold text-white transition-colors duration-700 sm:h-64 ${slide.color}`}
+      className={`relative flex h-56 w-full items-center justify-center rounded-xl bg-gradient-to-r px-6 text-center text-lg font-semibold text-white transition-colors duration-700 sm:h-72 ${slide.color}`}
     >
       {slide.title}
       <div className="absolute bottom-3 flex gap-1.5">
@@ -150,6 +150,9 @@ export default function DigitalMediaPage() {
           <a href="#continue" className="text-sm font-medium text-fuchsia-700 hover:underline dark:text-fuchsia-400">
             Browse
           </a>
+          <span className="rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+            Live
+          </span>
         </div>
         <button
           type="button"
@@ -166,8 +169,14 @@ export default function DigitalMediaPage() {
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-8">
-        <aside className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-medium text-sky-900 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
-          Watch Party tonight · The Last Signal S2, 8pm ET
+        <aside className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-medium text-sky-900 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
+          <span>Watch Party tonight · The Last Signal S2, 8pm ET</span>
+          <button
+            type="button"
+            className="rounded-full bg-sky-700 px-3 py-1 text-xs font-semibold text-white hover:bg-sky-800"
+          >
+            Join
+          </button>
         </aside>
         <div data-testid="featured-carousel">
           <FeaturedCarousel />
