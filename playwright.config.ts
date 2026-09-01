@@ -9,12 +9,16 @@ const headless = process.env.HEADLESS === "1" || process.env.HEADLESS === "true"
 
 export default defineConfig<EyesFixture>({
   testDir: "./tests",
+  // Eyes reporter writes visual results into the Playwright HTML report.
+  // Do not override this with --reporter=list (or similar) — MCP inspect
+  // reads playwright-report/index.html and would then see a stale report.
+  reporter: [["@applitools/eyes-playwright/reporter", { open: "never" }]],
   use: {
     baseURL: "http://localhost:3000",
     headless,
     eyesConfig: {
       appName: "Acme Media",
-      batch: { name: "Digital Media Visual Regression" },
+      batch: { name: process.env.APPLITOOLS_BATCH_NAME || "Digital Media Visual Regression" },
       // Ultrafast Grid — re-renders each checkpoint across these browsers.
       type: "ufg",
       browsersInfo: [
