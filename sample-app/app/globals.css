@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f8fa;
+  --foreground: #16181d;
+
+  /* Elevated surfaces (cards, panels, the wizard shell). */
+  --surface: #ffffff;
+  --surface-muted: #eef0f4;
+  --border: #e2e5ea;
+
+  --muted-foreground: #5b616e;
+
+  /* Applitools-inspired accent. */
+  --accent: #00b26a;
+  --accent-hover: #009b5c;
+  --accent-foreground: #ffffff;
+  --ring: #00b26a;
+}
+
+/* Dark palette. Shared by the class-based override (below) and the no-JS
+   system fallback, so keep the two blocks in sync. */
+.dark {
+  --background: #0b0d10;
+  --foreground: #e9edf2;
+
+  --surface: #14171c;
+  --surface-muted: #1b1f26;
+  --border: #262b33;
+
+  --muted-foreground: #9aa2b1;
+
+  --accent: #1ec27d;
+  --accent-hover: #33d08f;
+  --accent-foreground: #06231a;
+  --ring: #1ec27d;
+}
+
+/* Progressive-enhancement fallback: honor the OS preference before the theme
+   script runs (or if JS is disabled), but only when no explicit choice is set. */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    --background: #0b0d10;
+    --foreground: #e9edf2;
+
+    --surface: #14171c;
+    --surface-muted: #1b1f26;
+    --border: #262b33;
+
+    --muted-foreground: #9aa2b1;
+
+    --accent: #1ec27d;
+    --accent-hover: #33d08f;
+    --accent-foreground: #06231a;
+    --ring: #1ec27d;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Consistent focus ring for interactive elements the team drops in. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
