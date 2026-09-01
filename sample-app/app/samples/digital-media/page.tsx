@@ -23,7 +23,7 @@ function FeaturedCarousel() {
 
   return (
     <div
-      className={`relative flex h-40 w-full items-center justify-center rounded-xl bg-gradient-to-r px-6 text-center text-lg font-semibold text-white transition-colors duration-700 sm:h-56 ${slide.color}`}
+      className={`relative flex h-48 w-full items-center justify-center rounded-xl bg-gradient-to-r px-6 text-center text-lg font-semibold text-white transition-colors duration-700 sm:h-64 ${slide.color}`}
     >
       {slide.title}
       <div className="absolute bottom-3 flex gap-1.5">
@@ -145,7 +145,12 @@ export default function DigitalMediaPage() {
       <SampleBanner industry="streaming" />
 
       <header className="flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950">
-        <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">🎬 Acme Media</span>
+        <div className="flex items-center gap-4">
+          <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">🎬 Acme Media</span>
+          <a href="#continue" className="text-sm font-medium text-fuchsia-700 hover:underline dark:text-fuchsia-400">
+            Browse
+          </a>
+        </div>
         <button
           type="button"
           data-testid="episodes-badge"
@@ -160,7 +165,10 @@ export default function DigitalMediaPage() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-8">
+        <aside className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-medium text-sky-900 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
+          Watch Party tonight · The Last Signal S2, 8pm ET
+        </aside>
         <div data-testid="featured-carousel">
           <FeaturedCarousel />
         </div>
@@ -197,7 +205,7 @@ export default function DigitalMediaPage() {
             <TrendingChart />
           </section>
 
-          <section>
+          <section id="continue">
             <div className="mb-3 flex items-center gap-2">
               <h2 className="font-medium text-zinc-900 dark:text-zinc-50">Continue watching</h2>
               <Challenge
