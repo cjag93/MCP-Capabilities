@@ -86,7 +86,8 @@ async function main() {
   requireEnv("APPLITOOLS_READ_KEY");
   requireEnv("APPLITOOLS_WRITE_KEY");
 
-  await using agent = await Agent.create({
+  // Node 22 (GHA) does not support `await using`. Dispose explicitly.
+  const agent = await Agent.create({
     apiKey,
     model: { id: "composer-2.5" },
     name: "layout-eyes-mcp-ci",
@@ -102,36 +103,45 @@ async function main() {
     },
   });
 
-  const run = await agent.send(prompt());
-  console.log(`agent=${agent.agentId} run=${run.id}`);
+  try {
+    const run = await agent.send(prompt());
+    console.log(`agent=${agent.agentId} run=${run.id}`);
 
-  for await (const event of run.stream()) {
-    if (event.type === "assistant" && event.message?.content) {
-      for (const block of event.message.content) {
-        if (block.type === "text") process.stdout.write(block.text);
+    for await (const event of run.stream()) {
+      if (event.type === "assistant" && event.message?.content) {
+        for (const block of event.message.content) {
+          if (block.type === "text") process.stdout.write(block.text);
+        }
+      } else if (event.type === "tool_call") {
+        const name = event.name || event.toolCall?.name || "tool";
+        console.log(`\n[tool] ${name} ${event.status || ""}`.trim());
       }
-    } else if (event.type === "tool_call") {
-      const name = event.name || event.toolCall?.name || "tool";
-      console.log(`\n[tool] ${name} ${event.status || ""}`.trim());
     }
-  }
 
-  const result = await run.wait();
-  const summary = [
-    `status: ${result.status}`,
-    `agent: ${agent.agentId}`,
-    `run: ${result.id}`,
-    result.result ? `\n${result.result}` : "",
-  ].join("\n");
-  console.log(`\n${summary}`);
-  await appendSummary(`\`\`\`\n${summary}\n\`\`\`\n`);
+    const result = await run.wait();
+    const summary = [
+      `status: ${result.status}`,
+      `agent: ${agent.agentId}`,
+      `run: ${result.id}`,
+      result.result ? `\n${result.result}` : "",
+    ].join("\n");
+    console.log(`\n${summary}`);
+    await appendSummary(`\`\`\`\n${summary}\n\`\`\`\n`);
 
-  if (result.status === "error") {
-    process.exit(2);
-  }
-  if (result.status !== "finished") {
-    console.error(`Run ended as ${result.status}`);
-    process.exit(2);
+    if (result.status === "error") {
+      process.exitCode = 2;
+      return;
+    }
+    if (result.status !== "finished") {
+      console.error(`Run ended as ${result.status}`);
+      process.exitCode = 2;
+    }
+  } finally {
+    if (typeof agent[Symbol.asyncDispose] === "function") {
+      await agent[Symbol.asyncDispose]();
+    } else if (typeof agent.close === "function") {
+      await agent.close();
+    }
   }
 }
 
